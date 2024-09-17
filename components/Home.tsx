@@ -12,6 +12,7 @@ import {useAuth} from '../providers/AuthContext';
 import {AllActivity} from '../types/strava.types';
 import {getFetchOptions} from '../utils/getFetchOptions';
 import BackButton from './BackButton';
+import Activity from './Activity';
 
 const Home = () => {
   const {authResult} = useAuth();
@@ -29,7 +30,7 @@ const Home = () => {
       setActivities,
       setError,
     );
-  }, [authResult?.accessToken]);
+  }, [authResult?.accessToken, setLoading, setActivities, setError]);
 
   if (loading) {
     return (
@@ -50,10 +51,10 @@ const Home = () => {
   return (
     <View style={styles.container}>
       {activityId ? (
-        <>
-          <BackButton previous="Home" onPress={() => setActivityId(null)} />
-          <Text style={styles.title}>Activity: {activityId}</Text>
-        </>
+        <Activity
+          activityId={activityId}
+          onPrevious={() => setActivityId(null)}
+        />
       ) : (
         <>
           <Text style={styles.title}>Activities</Text>
