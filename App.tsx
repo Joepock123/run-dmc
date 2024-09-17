@@ -12,12 +12,14 @@ import React, {useCallback} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {AuthConfiguration, authorize} from 'react-native-app-auth';
 import DeviceInfo from 'react-native-device-info';
+import {useAuth} from './providers/AuthContext';
+import Home from './components/Home';
 
 const STRAVA_URL = 'https://www.strava.com';
-// const STRAVA_CLIENT_ID = '';
-// const STRAVA_CLIENT_SECRET = '';
-const STRAVA_CLIENT_ID = '89250';
-const STRAVA_CLIENT_SECRET = '5e8e8b10a5675c6ef110dd589436e708520be4d4';
+const STRAVA_CLIENT_ID = '134973';
+const STRAVA_CLIENT_SECRET = '0238dae4d59f561922e028393915785adcbb0c67';
+// const STRAVA_CLIENT_ID = '89250';
+// const STRAVA_CLIENT_SECRET = '5e8e8b10a5675c6ef110dd589436e708520be4d4';
 
 export const STRAVA_CONFIG: AuthConfiguration = {
   issuer: STRAVA_URL,
@@ -32,30 +34,36 @@ export const STRAVA_CONFIG: AuthConfiguration = {
 };
 
 const App = () => {
+  const {authResult, setAuthResult} = useAuth();
   console.log('\n');
   console.log(`${DeviceInfo.getBundleId()}://oauth`);
   console.log('\n');
   const onPressStravaAuth = useCallback(async () => {
     const result = await authorize(STRAVA_CONFIG);
     console.log(result, 'Strava oauth response');
-  }, []);
+    setAuthResult(result);
+  }, [setAuthResult]);
 
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       style={{padding: 16, flex: 1}}
       contentContainerStyle={{flex: 1}}>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity
-          onPress={onPressStravaAuth}
-          style={{
-            backgroundColor: '#161616',
-            borderRadius: 4,
-            padding: 16,
-          }}>
-          <Text style={{color: '#FFF'}}>Strava Auth</Text>
-        </TouchableOpacity>
-      </View>
+      {authResult?.accessToken ? (
+        <Home />
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={onPressStravaAuth}
+            style={{
+              backgroundColor: '#161616',
+              borderRadius: 4,
+              padding: 16,
+            }}>
+            <Text style={{color: '#FFF'}}>Strava Auth</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };
