@@ -2,7 +2,7 @@ export const fetchHelper = async <T>(
   url: string,
   options: RequestInit,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setState: React.Dispatch<React.SetStateAction<T>>,
+  setState: React.Dispatch<React.SetStateAction<T | null>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>,
 ): Promise<void> => {
   try {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,9 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {fetchHelper} from '../utils/fetchHelper';
-import {useAuth} from '../providers/AuthContext';
-import {getFetchOptions} from '../utils/getFetchOptions';
 import {ActivityStreams, Activity as ActivityType} from '../types/strava.types';
 import {getDecoratedLaps} from '../utils/getDecoratedLaps';
+import {useFetchWithAuth} from '../hooks/useFetchWithAuth';
 
 interface StreamsProps {
   activityId: number;
@@ -18,20 +16,13 @@ interface StreamsProps {
 }
 
 const Streams: React.FC<StreamsProps> = ({activityId, laps}) => {
-  const {authResult} = useAuth();
-  const [streams, setStreams] = useState<ActivityStreams | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
-
-  useEffect(() => {
-    fetchHelper(
-      `https://www.strava.com/api/v3/activities/${activityId}/streams?keys=cadence,heartrate,altitude,velocity_smooth&key_by_type=true`,
-      getFetchOptions(authResult?.accessToken),
-      setLoading,
-      setStreams,
-      setError,
-    );
-  }, [authResult?.accessToken, activityId, setLoading, setStreams, setError]);
+  const {
+    data: streams,
+    loading,
+    error,
+  } = useFetchWithAuth<ActivityStreams | null>(
+    `https://www.strava.com/api/v3/activities/${activityId}/streams?keys=cadence,heartrate,altitude,velocity_smooth&key_by_type=true`,
+  );
 
   const lapsDecorated = useMemo(() => {
     if (streams && laps) {

@@ -1,11 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
-import {fetchHelper} from '../utils/fetchHelper';
-import {useAuth} from '../providers/AuthContext';
-import {getFetchOptions} from '../utils/getFetchOptions';
 import BackButton from './BackButton';
 import {Activity as ActivityType} from '../types/strava.types';
 import Streams from './Streams';
+import {useFetchWithAuth} from '../hooks/useFetchWithAuth';
 
 interface ActivityProps {
   activityId: number;
@@ -13,20 +11,13 @@ interface ActivityProps {
 }
 
 const Activity: React.FC<ActivityProps> = ({activityId, onPrevious}) => {
-  const {authResult} = useAuth();
-  const [activity, setActivity] = useState<ActivityType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
-
-  useEffect(() => {
-    fetchHelper(
-      `https://www.strava.com/api/v3/activities/${activityId}`,
-      getFetchOptions(authResult?.accessToken),
-      setLoading,
-      setActivity,
-      setError,
-    );
-  }, [authResult?.accessToken, activityId, setLoading, setActivity, setError]);
+  const {
+    data: activity,
+    loading,
+    error,
+  } = useFetchWithAuth<ActivityType | null>(
+    `https://www.strava.com/api/v3/activities/${activityId}`,
+  );
 
   if (loading) {
     return (

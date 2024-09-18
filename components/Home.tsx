@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,29 +7,19 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {fetchHelper} from '../utils/fetchHelper';
-import {useAuth} from '../providers/AuthContext';
 import {AllActivity} from '../types/strava.types';
-import {getFetchOptions} from '../utils/getFetchOptions';
 import Activity from './Activity';
+import {useFetchWithAuth} from '../hooks/useFetchWithAuth';
 
 const Home = () => {
-  const {authResult} = useAuth();
-  const [activities, setActivities] = useState<AllActivity[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
-
   const [activityId, setActivityId] = useState<null | number>(null);
-
-  useEffect(() => {
-    fetchHelper(
-      'https://www.strava.com/api/v3/athlete/activities?per_page=100',
-      getFetchOptions(authResult?.accessToken),
-      setLoading,
-      setActivities,
-      setError,
-    );
-  }, [authResult?.accessToken, setLoading, setActivities, setError]);
+  const {
+    data: activities,
+    loading,
+    error,
+  } = useFetchWithAuth<AllActivity[]>(
+    'https://www.strava.com/api/v3/athlete/activities?per_page=100',
+  );
 
   if (loading) {
     return (
