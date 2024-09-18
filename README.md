@@ -1,3 +1,36 @@
+# Readme - Joe
+
+## Acceptability Criteria
+
+- [x] Fetch and render a list of activities using GET `https://www.strava.com/api/v3/athlete/activities`
+- [x] Allow user to click on activity and show more information (calories) using GET `https://www.strava.com/api/v3/activities/{id}`
+- [x] Fetch streams for the selected activity using GET `https://www.strava.com/api/v3/activities/{id}/streams`
+- [x] Using the laps array from the activity and the streams data, calculate:
+  - [x] maxCadence
+  - [x] maxElevation
+  - [x] minElevation
+  - [x] maxHeartRate
+  - [x] minHeartRate
+  - [x] maxSpeed
+- [x] Render data calculated for each lap
+
+## Approach
+
+- Use Postman to get response data and use to add types.
+- Store the auth in a provider.
+- The instructions say to use native fetch, create a reusable fetch handler to handle data retrieval, loading and error states.
+- Likely the most time consuming part of this task will be reading through the Strava API docs.
+- Ideally I'd like to test the function that decorates the laps with the additional data.
+
+## Improvements
+
+- I focused on writing clean fetching and rendering logic so the styling is bare bones.
+- Focused on readability for the `getDecoratedLaps.ts` function. This would need to be tested.
+- I'd use a fetching library such as SWR.
+- There are more Activity types that may have different data shapes (bike ride) to handle.
+
+---
+
 # Runna Strava Challenge
 
 ## Challenge
