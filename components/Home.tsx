@@ -11,7 +11,6 @@ import {fetchHelper} from '../utils/fetchHelper';
 import {useAuth} from '../providers/AuthContext';
 import {AllActivity} from '../types/strava.types';
 import {getFetchOptions} from '../utils/getFetchOptions';
-import BackButton from './BackButton';
 import Activity from './Activity';
 
 const Home = () => {
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    marginTop: 50,
   },
   item: {
     paddingVertical: 15,

@@ -45,10 +45,7 @@ const App = () => {
   }, [setAuthResult]);
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={{padding: 16, flex: 1}}
-      contentContainerStyle={{flex: 1}}>
+    <>
       {authResult?.accessToken ? (
         <Home />
       ) : (
@@ -64,7 +61,7 @@ const App = () => {
           </TouchableOpacity>
         </View>
       )}
-    </ScrollView>
+    </>
   );
 };
 
